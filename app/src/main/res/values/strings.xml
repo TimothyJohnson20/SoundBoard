@@ -7,4 +7,12 @@
     <string name="buttonE">E</string>
     <string name="buttonF">F</string>
     <string name="buttonG">G</string>
+    <string name="buttonASharp">A#</string>
+    <string name="buttonCSharp">C#</string>
+    <string name="buttonDSharp">D#</string>
+    <string name="buttonFSharp">F#</string>
+    <string name="buttonGSharp">G#</string>
+    <string name="buttonNext">Increase</string>
+    <string name="buttonBack">Decrease</string>
+
 </resources>
