@@ -14,5 +14,8 @@
     <string name="buttonGSharp">G#</string>
     <string name="buttonNext">Increase</string>
     <string name="buttonBack">Decrease</string>
+    <string name="Scale">Scale</string>
+    <string name="FurElise">Fur Elise</string>
+    <string name="Megalovania">Megalovania</string>
 
 </resources>
