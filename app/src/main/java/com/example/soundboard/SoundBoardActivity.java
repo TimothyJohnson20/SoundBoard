@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 public class SoundBoardActivity extends AppCompatActivity implements View.OnClickListener {
 
     public Button buttonA;
@@ -35,7 +37,10 @@ public class SoundBoardActivity extends AppCompatActivity implements View.OnClic
     private int[] soundsscale;
     private Button furElise;
     private Button megalovania;
-
+    private Button record;
+    private boolean isRecording;
+    private ArrayList<Integer> createSong = new ArrayList<>();
+    private Button playRecording;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,9 +49,9 @@ public class SoundBoardActivity extends AppCompatActivity implements View.OnClic
         setListeners();
         soundPool = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
         soundArray();
-        pitch.setText("1");
         octave = 1;
         scaleArray();
+        isRecording = false;
     }
     public void setListeners(){
         buttonA.setOnClickListener(this);
@@ -65,16 +70,12 @@ public class SoundBoardActivity extends AppCompatActivity implements View.OnClic
             @Override
             public void onClick(View view) {
                 rateChange = (rateChange + .8);
-                octave++;
-                pitch.setText(octave + "");
             }
         });
         buttonBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 rateChange = (rateChange - .8);
-                octave--;
-                pitch.setText(octave + "");
             }
         });
         scale.setOnClickListener(new View.OnClickListener() {
@@ -95,8 +96,30 @@ public class SoundBoardActivity extends AppCompatActivity implements View.OnClic
                 playMegalovania();
             }
         });
-    }
+        record.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(isRecording){
+                    isRecording = false;
+                }
+                else{
+                    isRecording = true;
+                }
+            }
+        });
+        playRecording.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int length = createSong.size();
+                for(int i = 0; i < length; i ++)
+                {
+                    soundPool.play(soundsscale[createSong.get(i)], 1, 1, 1, 0, (float)rateChange);
+                    delay(100);
+                }
+            }
+        });
 
+    }
     private void playScale(){
         for(int i = 0; i < 12; i++){
             soundPool.play(soundsscale[i], 1, 1, 1, 0, (float) rateChange);
@@ -112,7 +135,6 @@ public class SoundBoardActivity extends AppCompatActivity implements View.OnClic
             e1.printStackTrace();
         }
     }
-
     private void soundArray(){
         sounds = new int[12];
         sounds[0] = soundPool.load(getApplicationContext(), R.raw.scalea, 1);
@@ -143,7 +165,6 @@ public class SoundBoardActivity extends AppCompatActivity implements View.OnClic
         soundsscale[10] = soundPool.load(getApplicationContext(), R.raw.scaleg, 1);         //  G       10
         soundsscale[11] = soundPool.load(getApplicationContext(), R.raw.scalegs, 1);        //  G#      11
     }
-
     private void playFurElise(){
         int[] furElise = {7, 6, 7, 6, 7, 2, 5, 3, 0, 3, 7, 0, 3, 7, 0, 2, 3, 7, 6, 7, 6, 7, 2, 5, 3, 0, 3, 7, 0, 3, 7, 3, 2, 0, 2, 3, 5, 7, 10, 8, 7, 5, 7
         , 7, 5, 3, 7, 5, 3, 7, 7, 6, 7, 6, 7, 7, 5, 3, 0, 3, 7, 0, 2, 7, 0, 2, 3, 7, 6, 7, 6, 7, 2, 5, 3, 0, 3, 7, 0, 2, 7, 3, 2, 0};
@@ -163,9 +184,7 @@ public class SoundBoardActivity extends AppCompatActivity implements View.OnClic
             }
             rateChange = rateChange + .8;
         }
-
     }
-
     public void wireWidgets(){
         buttonA = findViewById(R.id.button_soundboard_a);
         buttonB = findViewById(R.id.button_soundboard_b);
@@ -181,12 +200,12 @@ public class SoundBoardActivity extends AppCompatActivity implements View.OnClic
         buttonGSharp = findViewById(R.id.button_soundboard_gs);
         buttonNext = findViewById(R.id.button_soundboard_next);
         buttonBack = findViewById(R.id.button_soundboard_back);
-        pitch = findViewById(R.id.textView_main_pitch);
         scale = findViewById(R.id.button_soundboard_scale);
         furElise = findViewById(R.id.button_soundboard_furElise);
         megalovania = findViewById(R.id.button_soundboard_megalovania);
+        record = findViewById(R.id.button_soundboard_record);
+        playRecording = findViewById(R.id.button_soundboard_playrecording);
     }
-
     @Override
     public void onClick(View view) {
         int index = -1;
@@ -227,6 +246,10 @@ public class SoundBoardActivity extends AppCompatActivity implements View.OnClic
             case R.id.button_soundboard_gs:
                 index = 11;
                 break;
+
+        }
+        if(isRecording) {
+            createSong.add(index);
         }
         soundPool.play(sounds[index], 1, 1 ,1, 0, (float)rateChange);
 

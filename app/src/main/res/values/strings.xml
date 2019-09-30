@@ -17,5 +17,6 @@
     <string name="Scale">Scale</string>
     <string name="FurElise">Fur Elise</string>
     <string name="Megalovania">Megalovania</string>
-
+    <string name="Record">Record</string>
+    <string name="playRecording">Play Recording</string>
 </resources>
