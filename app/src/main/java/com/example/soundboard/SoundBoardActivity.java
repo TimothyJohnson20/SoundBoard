@@ -1,7 +1,9 @@
 package com.example.soundboard;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Bundle;
@@ -29,7 +31,6 @@ public class SoundBoardActivity extends AppCompatActivity implements View.OnClic
     private Button buttonNext;
     private Button buttonBack;
     private Button scale;
-    private TextView pitch;
     private SoundPool soundPool;
     private double rateChange = 1;
     private int octave;
@@ -41,6 +42,8 @@ public class SoundBoardActivity extends AppCompatActivity implements View.OnClic
     private boolean isRecording;
     private ArrayList<Integer> createSong = new ArrayList<>();
     private Button playRecording;
+    private ConstraintLayout constraintLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,8 +55,11 @@ public class SoundBoardActivity extends AppCompatActivity implements View.OnClic
         octave = 1;
         scaleArray();
         isRecording = false;
+        Color color = new Color();
+        constraintLayout.setBackgroundColor(color.BLUE);
     }
-    public void setListeners(){
+
+    public void setListeners() {
         buttonA.setOnClickListener(this);
         buttonB.setOnClickListener(this);
         buttonC.setOnClickListener(this);
@@ -99,11 +105,13 @@ public class SoundBoardActivity extends AppCompatActivity implements View.OnClic
         record.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(isRecording){
+                if (isRecording) {
                     isRecording = false;
-                }
-                else{
+                    record.setText(R.string.record);
+                } else {
                     isRecording = true;
+                    createSong.clear();
+                    record.setText(R.string.stop);
                 }
             }
         });
@@ -111,31 +119,32 @@ public class SoundBoardActivity extends AppCompatActivity implements View.OnClic
             @Override
             public void onClick(View view) {
                 int length = createSong.size();
-                for(int i = 0; i < length; i ++)
-                {
-                    soundPool.play(soundsscale[createSong.get(i)], 1, 1, 1, 0, (float)rateChange);
-                    delay(100);
+                for (int i = 0; i < length; i++) {
+                    soundPool.play(sounds[createSong.get(i)], 1, 1, 1, 0, (float) rateChange);
+                    delay(200);
                 }
             }
         });
 
     }
-    private void playScale(){
-        for(int i = 0; i < 12; i++){
+
+    private void playScale() {
+        for (int i = 0; i < 12; i++) {
             soundPool.play(soundsscale[i], 1, 1, 1, 0, (float) rateChange);
             delay(300);
-                }
+        }
 
-        }
-    private void delay(int millis){
-        try{
+    }
+
+    private void delay(int millis) {
+        try {
             Thread.sleep(millis);
-        }
-        catch (InterruptedException e1){
+        } catch (InterruptedException e1) {
             e1.printStackTrace();
         }
     }
-    private void soundArray(){
+
+    private void soundArray() {
         sounds = new int[12];
         sounds[0] = soundPool.load(getApplicationContext(), R.raw.scalea, 1);
         sounds[1] = soundPool.load(getApplicationContext(), R.raw.scaleb, 1);
@@ -150,7 +159,8 @@ public class SoundBoardActivity extends AppCompatActivity implements View.OnClic
         sounds[10] = soundPool.load(getApplicationContext(), R.raw.scalefs, 1);
         sounds[11] = soundPool.load(getApplicationContext(), R.raw.scalegs, 1);
     }
-    private void scaleArray(){
+
+    private void scaleArray() {
         soundsscale = new int[12];
         soundsscale[0] = soundPool.load(getApplicationContext(), R.raw.scalea, 1);          //  A       0
         soundsscale[1] = soundPool.load(getApplicationContext(), R.raw.scalebb, 1);         //  A#      1
@@ -165,27 +175,30 @@ public class SoundBoardActivity extends AppCompatActivity implements View.OnClic
         soundsscale[10] = soundPool.load(getApplicationContext(), R.raw.scaleg, 1);         //  G       10
         soundsscale[11] = soundPool.load(getApplicationContext(), R.raw.scalegs, 1);        //  G#      11
     }
-    private void playFurElise(){
+
+    private void playFurElise() {
         int[] furElise = {7, 6, 7, 6, 7, 2, 5, 3, 0, 3, 7, 0, 3, 7, 0, 2, 3, 7, 6, 7, 6, 7, 2, 5, 3, 0, 3, 7, 0, 3, 7, 3, 2, 0, 2, 3, 5, 7, 10, 8, 7, 5, 7
-        , 7, 5, 3, 7, 5, 3, 7, 7, 6, 7, 6, 7, 7, 5, 3, 0, 3, 7, 0, 2, 7, 0, 2, 3, 7, 6, 7, 6, 7, 2, 5, 3, 0, 3, 7, 0, 2, 7, 3, 2, 0};
+                , 7, 5, 3, 7, 5, 3, 7, 7, 6, 7, 6, 7, 7, 5, 3, 0, 3, 7, 0, 2, 7, 0, 2, 3, 7, 6, 7, 6, 7, 2, 5, 3, 0, 3, 7, 0, 2, 7, 3, 2, 0};
         int length = furElise.length;
-        for(int i = 0; i < length; i++){
-            soundPool.play(soundsscale[furElise[i]], 1, 1, 1, 0, (float)rateChange);
+        for (int i = 0; i < length; i++) {
+            soundPool.play(soundsscale[furElise[i]], 1, 1, 1, 0, (float) rateChange);
             delay(200);
         }
     }
-    private void playMegalovania(){
+
+    private void playMegalovania() {
         int[] megalovania = {5, 0, 11, 10, 8, 5, 8, 10, 3, 3};
         int length = megalovania.length;
-        for(int c = 0; c < 5; c++){
-            for(int i = 0; i < length; i ++){
-                soundPool.play(soundsscale[megalovania[i]], 1, 1, 1, 0, (float)rateChange);
+        for (int c = 0; c < 5; c++) {
+            for (int i = 0; i < length; i++) {
+                soundPool.play(soundsscale[megalovania[i]], 1, 1, 1, 0, (float) rateChange);
                 delay(200);
             }
             rateChange = rateChange + .8;
         }
     }
-    public void wireWidgets(){
+
+    public void wireWidgets() {
         buttonA = findViewById(R.id.button_soundboard_a);
         buttonB = findViewById(R.id.button_soundboard_b);
         buttonC = findViewById(R.id.button_soundboard_c);
@@ -205,11 +218,13 @@ public class SoundBoardActivity extends AppCompatActivity implements View.OnClic
         megalovania = findViewById(R.id.button_soundboard_megalovania);
         record = findViewById(R.id.button_soundboard_record);
         playRecording = findViewById(R.id.button_soundboard_playrecording);
+        constraintLayout = findViewById(R.id.Constraintlayout_soundboard_constraintlayout);
     }
+
     @Override
     public void onClick(View view) {
         int index = -1;
-        switch(view.getId()){
+        switch (view.getId()) {
             case R.id.button_soundboard_a:
                 index = 0;
                 break;
@@ -248,10 +263,10 @@ public class SoundBoardActivity extends AppCompatActivity implements View.OnClic
                 break;
 
         }
-        if(isRecording) {
+        if (isRecording) {
             createSong.add(index);
         }
-        soundPool.play(sounds[index], 1, 1 ,1, 0, (float)rateChange);
+        soundPool.play(sounds[index], 1, 1, 1, 0, (float) rateChange);
 
     }
 }
